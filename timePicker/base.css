@@ -1,0 +1,173 @@
+.taskBox{
+    display: flex;
+}
+
+.taskList{
+   display: block;
+}
+/************************/
+
+.sidebar{
+  width: 85px;
+  padding-top: 5px;
+}
+
+.sidebar__task-btn{
+background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAQpJREFUSMft1T1uwkAQhuGXCipyA/A1qMgBwKdBdIt8ApQLAKJOgSLF/BUcxfgkHhqbBHl/RnYUKRHzlTt+rPWuPPBrNWLGnFE75IU9Uial3xxK74wgfGgf6xBjSO55QxAKVqwpEITlt9UFMR07s3t4f5UVABvr2s5GxdZWYQ3A1rE6rUPG0VqwYVturR5ThxJHqz/Jf4KOZD8BfdJlyLUtlNIF4LUdVDEReRvIxjSA9lYmCGVcVEwAyhjQ46xgAtAYgB4nBOHgYQJQTlRSxwAT/EZflJ9RnFpF+RnV8VeUj1Heo5wowKgvZB5g/siPbdEIMvpx5M9EPyB9eXfN2unDyPbHMLEzz3LVDavXlqrXVvG0AAAAAElFTkSuQmCC');
+cursor: pointer;
+width:36px;
+height:36px;
+}
+  
+.sidebar__label{
+font-size: 14px;
+    font-weight: bold;
+    line-height: 0.75em;
+    padding-left: 35px;
+    padding-top: 3px;
+}
+
+.task-area{
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  display: block;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  width: 450px;
+  padding: 5px;
+  margin:15px; 
+}
+
+.task-header{
+  height:55px;
+  font-size:16px;
+  font-weight:bold;
+  margin:5px;
+}
+
+.task-header__icon_del{
+     position: relative;
+    left: 98%;
+    top: -67px;   
+    width:36px;
+    height:36px;
+  background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjlBMTUzRTAxNDI4RjExRTZCNkZFQjlCRjE4RDc3M0VDIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjlBMTUzRTAyNDI4RjExRTZCNkZFQjlCRjE4RDc3M0VDIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUExNTNERkY0MjhGMTFFNkI2RkVCOUJGMThENzczRUMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUExNTNFMDA0MjhGMTFFNkI2RkVCOUJGMThENzczRUMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz56U0VuAAADA0lEQVR42uxYXYtSURT1Zs7j4PyF6EERfEpQBB8jGQlBAqV+S0zML4iCUcJppqHEcZKReoh6jhICg14Lmj4YNINgXnTMe9tLzo09Z+7HuR8PBm1Y4PXuc1zus8/e6xzNMIzIMtmFyJLZ0hG6yB80TVMZs0K4RrhKuEK4RIiLd78InwjvCK8ILwinbhOeSRs8mHCxNcIm4SeGKWJMuMMI2xL6y0GR0E3CDw9EZAwJ1UCExDOW9IH8A7FY7HOtVtsdDAbt6XT6gXxPAHzGd3gHHwtiW4So1W+pRAhkDmUivV5vl3xnhrvNut3uTjQa/SKRegpSfgidiUw6nT7UdX1seDQaM0ylUj2JVN0roVt8gnK5vGcEtFKp9FgiVVUltMYTGJExQrJkMvlMSvS4CqFNnjN+lslp+SinvjJSG26EVnidEQl8zur1+nahUGjbJXMul+s0m81tq5edTmeHEcJKxJwIXefRsdpNIEPvdfjk8/l9mUwmkzkQc+iNRqNpRZjmPmKk1p0I3TcdUUus/iEiw5MT0bAgs4BdFCuVyiPmd9eJ0FvTEQXOLhcQGf7D2Wz2QCZDPrbj+/3+E+b72onQyHQUFdjWEBm7VuFEBjaZTN7z3eZE6NR0FO3A0RAZr2SEnbAxU84hiB76PZ/PwxdEPpfsXAJLUdoPa8neKCT1zCqBAZvdFyip77ltezmZec7Iu88uUrTt91S3vWthRAVmhbHtQFi3qdYzSZKsu7WOsekMPWP1D1GBHVrHIjJ2raPVaj1kZEZurSMiNPBiAP4JGmKIzfU7zfmNEbqt0u3jQhosBkFchUUokUg8Z2SOCauqAq3KkxPiKiiZYrEoC7QbXiXsFp8A4srP8mGZpMgYool71tQQ4l0+EcQV9IyqyEcCSzkDdHyJfPEcFYJcPgYdQUKgwKHqmscgfMZ3qDMWpw1D1DnfxyA5p4YBDorHPGfCOLmau2/D4wl2JLb2qmo/1TgRxcuGmLhoMC8bLkuXDR/FZcNLgZmXywbt/4XVv0bojwADAPZJnO0SwF2fAAAAAElFTkSuQmCC');
+  cursor: pointer;
+  
+}
+
+
+.task-area__text-field{
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+
+.task-area__footer{
+  display: flex;
+  align-items:stretch;
+  justify-content:   flex-end;
+}
+
+
+.task-btn {   
+  margin: 5px;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  cursor: pointer;
+  padding: .2em 1.2em;
+  outline: none;
+  border: 1px solid rgba(0,0,0,.1);
+  background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+
+}
+
+
+/*  форма ввода данных */
+
+.inputform-box_hide{
+  display: none;
+
+}
+.inputform-box_vis{
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  position: relative;
+  background-color: white;
+  width: 550px;
+  height: 280px;
+  padding: 5px;
+  margin: 15px;
+   font-family:Georgia, Times, "Times New Roman", serif;
+}
+ 
+.inputform-box__input{
+  width: 85%;
+}
+
+.inputform-box__footer{
+  display: flex;
+  align-items:stretch;
+  justify-content:    flex-end;
+}
+
+
+.inputform-box__fieldList {
+width:550px;
+list-style-type:none;
+list-style-position:outside;
+margin:0px;
+padding:0px;
+}
+
+.fieldList-item{
+padding:5px;
+border-bottom:1px solid #eee;
+position:relative;
+}
+
+.inputform-box_vis .fieldList-item:first-child {
+border-bottom:1px solid #777;
+}
+
+.inputform-box_vis h2 {
+margin:0;
+display: inline;
+}
+ 
+
+.inputform-box_vis__label {
+width:150px;
+margin-top: 3px;
+display:inline-block;
+float:left;
+padding:3px;
+}
+
+.inputform-box__input {
+height:20px;
+width:220px;
+padding:5px 8px;
+}
+
+.inputform-box__textarea {
+	padding:8px; 
+	width:350px;
+	}
+
+
+.inputform-box__input, .inputform-box__textarea {
+    border:1px solid #aaa;
+    box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+    border-radius:2px;
+}
+.inputform-box__input:focus, .inputform-box__textarea:focus {
+    background: #fff;
+    border:1px solid #555;
+    box-shadow: 0 0 3px #aaa;
+}
+/*  форма ввода данных */
+
+
+
+/* ***********************************/
+
