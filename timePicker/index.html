@@ -2,27 +2,17 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello React!</title>
-	<script src="js\react.js"></script>
-    <script src="js\react-dom.js"></script>
-    <script src="js\browser.js"></script>
-	<link rel="stylesheet" type="text/css" href="css\base.css">
+    <title>TimeTracker</title>
+	<script src="react.js"></script>
+    <script src="react-dom.js"></script>
+    <script src="browser.js"></script>
+	<link rel="stylesheet" type="text/css" href="base.css">
  </head>
-
-  
-
-  <body>
-
-
-<div id="content">
-	
-</div>
-	
+  <body> 
+	<div id="content" class="content">
+	</div>		
 <script type = "text/babel">
-	
-// tutorial8.js
-var data = [];
- 
+
 function getTasksFromLocal(){
 	var resultTasks=[];
 	var index=1; 
@@ -34,13 +24,10 @@ function getTasksFromLocal(){
 					id: JSON.parse(localStorage.getItem(element)).id ,
 					person: JSON.parse(localStorage.getItem(element)).person ,
 					project: JSON.parse(localStorage.getItem(element)).project ,
-					task: JSON.parse(localStorage.getItem(element)).task ,
+					comment: JSON.parse(localStorage.getItem(element)).comment ,
 					cost: JSON.parse(localStorage.getItem(element)).cost ,
-					start_dt: JSON.parse(localStorage.getItem(element)).start_dt,
-					end_dt: JSON.parse(localStorage.getItem(element)).end_dt,
 					active: JSON.parse(localStorage.getItem(element)).active,
-					sum: JSON.parse(localStorage.getItem(element)).sum,
-					elapsed: JSON.parse(localStorage.getItem(element)).elapsed
+					timer: JSON.parse(localStorage.getItem(element)).timer
 					};
     				index++;
 					resultTasks.push(TaskForExport);
@@ -52,33 +39,35 @@ function getTasksFromLocal(){
 
 
 var TaskBox = React.createClass({	
-	getInitialState: function() {
-    return {
-		inputBoxVisible:false,	
-		selected:{},
-    	data: []};
-  },
-
-	componentDidMount: function() {
-		this.setState({data : this.props.data});
+	getInitialState: function(){
+		return {
+			data : this.props.data,
+			selected: {}
+		}
 	},
 
-	handleinputBoxVisibleShowing : function(show,task){
-		this.setState({inputBoxVisible : show, selected : task});
+
+	handleTaskSubmit: function(task) {	  	
+	    localStorage.setItem(task.id ,  JSON.stringify(task));
+	    this.setState({
+	    				data:  getTasksFromLocal(),
+	    				selected: {} 
+	    			});
+	},
+
+	handleTaskResume : function(task){
+		this.setState({selected: task});
 	},
 
 	handleTaskChange: function(task, type){
 		var tasks = this.state.data;
-	    var selectedTask = this.state.selected;
-	
-
+	    
 		 	if (type == 'ACTION_TYPE_EDIT') editSelected(this);
 	   		if (type == 'ACTION_TYPE_DEL') delSelected(this);
 
 	   	function editSelected(me){
 			localStorage.removeItem(task.id);
 			localStorage.setItem(task.id , JSON.stringify(task));
-			me.setState({inputBoxVisible : false});
 			me.setState({data: getTasksFromLocal()});
 		}
 
@@ -87,318 +76,510 @@ var TaskBox = React.createClass({
 			me.setState({data: getTasksFromLocal()});
 		}
 	},
-	
-	handleTaskSubmit: function(task) {	  	
-	    localStorage.setItem(task.id , JSON.stringify(task));
-	    this.setState({data:  getTasksFromLocal()});
-	    this.setState({inputBoxVisible : false});
-	},
 
-  render: function() {     
-	return (
-      <div className="taskBox">
-        <TaskList 
-        		data={this.state.data} 
-        		onTaskChange={this.handleTaskChange}
-        		handleinputBoxVisibleShowing={this.handleinputBoxVisibleShowing}
-        />
-        <Sidebar 
-        		handleinputBoxVisibleShowing={this.handleinputBoxVisibleShowing}
-        />        
-        <TaskForm 
-        		formShowing={this.state.inputBoxVisible} 
-        		onTaskSubmit={this.handleTaskSubmit} 
-        		onTaskChange={this.handleTaskChange}        		
-        		handleinputBoxVisibleShowing={this.handleinputBoxVisibleShowing}
-				task = {this.state.selected}
-        />
-      </div>
-    );
-  }
-});
-
-var Sidebar = React.createClass({
-		readmoreClick: function(){		
-			this.props.handleinputBoxVisibleShowing(true);		
-		},
-
-		render: function(){
-			return (
-				<div className="sidebar">					
-					<div id="task-btn_add" className="sidebar__task-btn" onClick={this.readmoreClick}>
-							<p className="sidebar__label"> {"Добавить новую задачу"}</p>
-					</div>				
-				</div>
-			)
-		}
+	render:   function(){
+		
+		return  (
+			<div className="tasklist-content">
+				<Sidebar 
+					selectedTask={this.state.selected}
+					handleTaskSubmit={this.handleTaskSubmit}
+				/>				 
+				<TaskList 
+					handleTaskResume={this.handleTaskResume}
+					handleTaskSubmit={this.handleTaskSubmit} 
+					handleTaskChange = {this.handleTaskChange}
+					data={this.state.data} 
+				/>
+			</div> 
+		)
+	}
 });
 
 var TaskList = React.createClass({
   render: function() {
-  		var me = this; 
-    	var taskNodes = this.props.data.map(function(task){
-	  	var handleinputBoxVisibleShowing = me.props.handleinputBoxVisibleShowing;
-	  	var handleTaskChange=me.props.onTaskChange;
-  	 
+    var me = this;
+    var taskNodes = this.props.data.map(function(task){	   
   	return (
-        <Task    
-        	handleTaskChange={handleTaskChange}
-			handleinputBoxVisibleShowing={handleinputBoxVisibleShowing}
-			id={task.id} 
+        <Task 
+        	handleTaskSubmit = {me.props.handleTaskSubmit}
+        	handleTaskChange = {me.props.handleTaskChange}
+        	handleTaskResume = {me.props.handleTaskResume}
+
+        	id={task.id} 
         	person={task.person} 
         	key={task.id+'_key'} 
         	project={task.project} 
-        	task={task.task} 
-        	elapsed={task.elapsed} 
-        	active={task.active} 
-        	sum={task.sum}
-        	start_dt={task.start_dt} 
-        	end_dt={task.end_dt} 
-        	cost={task.cost}>          
-        </ Task>
+        	comment={task.comment} 
+        	timer={task.timer} 
+        	active={task.active}         	
+        	cost={task.cost}          
+        	/>
       	);
   	})
+
     return (
-      <div className='taskList'>
+      <div className='tasklist'>
         {taskNodes}
       </div>
     );
   }
 });
 
+var Sidebar = React.createClass({
+	getInitialState: function(){
+		return {							
+			id: '',
+			timer: 0,	
+			person: '',
+			project:'',
+			cost:'',
+			comment:'',
+			isActive:false
+		}						
+	},
 
-var TaskForm = React.createClass({
-	getInitialState: function() {
-	    return {	    	 
-	    	person: '', 
-	    	project: '',
-	    	cost: '', 
-	    	task: ''
-	    };
-	  },	 
-	    
-	  handlePersonChange: function(e) {
-	    this.setState({person: e.target.value});
-	  },
-	  handleProjectChange: function(e) {
-	    this.setState({project: e.target.value});
-	  },
-	  handleCostChange: function(e) {	 
-	    var reg = /\D/;
+	componentWillReceiveProps : function(nextProps){
+		var selectedTask = nextProps.selectedTask;
+
+		if (selectedTask.person != undefined){
+			this.setState({
+					person: selectedTask.person,
+					project: selectedTask.project,
+					comment: selectedTask.comment,
+					cost: selectedTask.cost,
+					isActive: true
+			});
+		this.interval = setInterval(this.tick, 1000);	
+		}		
+	},
+
+	tick: function() {
+  	  	this.setState({timer: this.state.timer + 1});  	  	
+  	},
+  	
+	handlePersonChange: function(e) {
+	    this.setState({person: e.target.value});		   
+	},
+
+	handleProjectChange: function(e) {
+	    this.setState({project: e.target.value});	   
+	},
+
+	handleCostChange: function(e) {
+		var reg = /\D/;
 	    var result = e.target.value.match( reg );
-	    result==null ? this.setState({cost: e.target.value}) :	alert('Введено не корректное число!');	     
-	  },
-	  handleTasksChange: function(e) {
-	    this.setState({task: e.target.value});
-	  },
-	 	
-	  handleExit: function(e) {
-		this.props.handleinputBoxVisibleShowing(false);
-	  },
+	    result==null ? this.setState({cost: e.target.value}) :	alert('Введено не корректное число!');	   			   
+	},
 
-	  handleEdit: function(e) {
-	  	console.log('handlEdit');
-	  	var selectedTask = this.props.task;	  	 
-	    var person = this.state.person;
-	    var project = this.state.project;
-	    var cost = this.state.cost;
-	    var task = this.state.task;	   
+	handleCommentChange: function(e) {
+	    this.setState({comment: e.target.value});			     
+	},
 
-	    function checkEmptyFill(before, after){
-	    	if (after == '')
-	    		return before
-	    	else
-	    		if (after !=  before)
-	    			return after
-	    }
-	   
-	    this.props.onTaskChange({
-	    	id: selectedTask.id, 
-	    	start_dt: selectedTask.start_dt, 
-	    	person: checkEmptyFill(selectedTask.person,person), 
-	    	project: checkEmptyFill(selectedTask.project,project),
-	    	cost: checkEmptyFill(selectedTask.cost,cost),
-	    	task: checkEmptyFill(selectedTask.task,task),
-        	elapsed:selectedTask.elapsed,
-        	active:selectedTask.active,
-        	sum:selectedTask.sum,       	
-        	end_dt:selectedTask.end_dt  	 
+	handleInputClick : function(e){		
+		var p = e.target;
+		var fInp = e.target.id.split('_')[0]+'_'+e.target.id.split('_')[1]+'_'+e.target.id.split('_')[2];
+		var inp = document.getElementById(fInp);		
+		inp.classList.toggle('hidden');
+		p.classList.toggle('hidden');
+		inp.focus();
+		
+		if (e.target.id.split('_')[0] == 'comment'){				
+		var commDiv = document.getElementById('commentsDiv');
+			commDiv.classList.toggle('hidden');
+			p.classList.toggle('hidden');
+		var inputField = document.getElementById('comment_input_'+this.state.id);
+			inputField.focus();
+		var taskBox = document.getElementsByClassName('tasklist');
+			for (var i=0; i<taskBox.length;i++)
+				taskBox[i].classList.toggle('smooth');
+		};
+							
+		if (e.target.id.split('_')[0] == 'cost'){
+		var costDiv = document.getElementById('costDiv');
+			costDiv.classList.toggle('hidden');
+			p.classList.toggle('hidden');
+		var inputField = document.getElementById('cost_input_'+this.state.id);
+			inputField.focus();
+		var taskBox = document.getElementsByClassName('tasklist');
+			for (var i=0; i<taskBox.length;i++)
+				taskBox[i].classList.toggle('smooth');
+		};				
+	},
 
-	    }, 'ACTION_TYPE_EDIT');
-	    this.setState({person: '', project: '',cost: '', task: ''});
-		this.props.handleinputBoxVisibleShowing(false);
-	  },
+	handleTimerEvent : function(){
+		 if (this.state.isActive){
+		 	clearInterval(this.interval);
+		 	this.createNewTask();	 
+		 }
+		 else{
+		 	this.interval = setInterval(this.tick, 1000);	
+		 }
+	},
 
-	  handleSubmit: function(e) {	   
-	    e.preventDefault();
-	    var person = this.state.person;
-	    var project = this.state.project;
-	    var cost = this.state.cost;
-	    var task = this.state.task;	  
-	    var taskId = 'task-id-'+Date.now();
-	    var taskStart_dt = Date.now();  	
-	    var active = true; 
-	    var selectedTask = this.props.task;
+	handleActivityChange : function(){
+		this.setState({isActive: !this.state.isActive})
+		this.handleTimerEvent();		 
+	},
 
-	    if (selectedTask != undefined) {
-	    	this.handleEdit();
-	    }
-	    	else{	   
-			    this.props.onTaskSubmit({id: taskId, start_dt: taskStart_dt, person: person, project: project,cost: cost, task: task, active:active}, 'ACTION_TYPE_ADD');
-			    this.setState({person: '', project: '',cost: '', task: ''});
-			}	 	
-	  },
-	 
-	 render: function() {
-		 return (			 
-	    	<div className ={ this.props.formShowing ? 'inputform-box_vis' : 'inputform-box_hide' }>
-				<ul className="inputform-box__fieldList">				
-					<li className="fieldList-item">
-						<h2 className="inputform-box__title">{"Добавление(изменение) задачи"}</h2>
-					</li>
-					<li className="fieldList-item">
-						<label for="person" className="inputform-box_vis__label">ФИО исполнителя:</label>
-						<input  id="person_input" type="text" name="person" className="inputform-box__input"  value = {this.state.person} onChange={this.handlePersonChange}/>
-					</li>
-					<li className="fieldList-item">
-						<label for="project"  className="inputform-box_vis__label">Проект:</label>
-						<input id="project_input" type="text" name="project"  className="inputform-box__input" value = {this.state.project} onChange={this.handleProjectChange}/>
-					</li>
-					<li className="fieldList-item">
-						<label for="cost"  className="inputform-box_vis__label">Ставка(р/час):</label>
-						<input id="cost_input" type="text" name="cost"  className="inputform-box__input" value = {this.state.cost} onChange={this.handleCostChange}/>
-					</li>
-					<li className="fieldList-item">
-						<label for="task"  className="inputform-box_vis__label">Комменатрии к задаче:</label>
-						<textarea id="task_input" className="tasks"  name="task"  className="inputform-box__textarea" value = {this.state.task} onChange={this.handleTasksChange}></textarea>
-					</li>
-					<li className="inputform-box__footer">
-						<p id="task-btn_save" className ="task-btn" onClick={this.handleSubmit}>{"Сохранить измененения"}</p>	
-						<p id="task-btn_cancel" className ="task-btn" onClick={this.handleExit}>{"Отмена"}</p>	
-					</li>
-				</ul>		
-			</div>			       
-	    );
-	  }
-});
-	
-var Task = React.createClass({
-	getInitialState: function(){			 
-		var elapsed =0;		 
-		this.props.elapsed ? elapsed = this.props.elapsed : elapsed = 0;
-		return {						
-			end_dt: this.props.end_dt,
-			inProcess: this.props.active,
-			elapsedTime: elapsed
+	handleKeyPress: function(e){	
+
+		if (e.keyCode == 13){
+			console.log(e.keyCode);
+			var inpType = e.target.id.split('_');
+
+			if (inpType[0] == 'person'){
+				this.setState({person: e.target.value});	   
+				var inp = e.target;
+				var p = document.getElementById(e.target.id+'_label');
+				inp.classList.toggle('hidden');
+				p.classList.toggle('hidden');
+			}
+			if (inpType[0] == 'project'){
+				this.setState({project: e.target.value});	   
+				var inp = e.target;
+				var p = document.getElementById(e.target.id+'_label');
+				inp.classList.toggle('hidden');
+				p.classList.toggle('hidden');
+			}
+			if (inpType[0] == 'cost'){
+				var costDiv = document.getElementById('costDiv');
+				costDiv.classList.toggle('hidden');
+				this.setState({cost: e.target.value});	   
+				var inp = e.target;
+				var p = document.getElementById(e.target.id+'_label');
+				inp.classList.toggle('hidden');	
+				var taskBox = document.getElementsByClassName('tasklist');
+				for (var i=0; i<taskBox.length;i++)
+				taskBox[i].classList.toggle('smooth');			
+			}
+			if (inpType[0] == 'comment'){
+				var commDiv = document.getElementById('commentsDiv');
+				commDiv.classList.toggle('hidden');
+				this.setState({comment: e.target.value});	   
+				var inp = e.target;
+				var p = document.getElementById(e.target.id+'_label');
+				inp.classList.toggle('hidden');	
+				var taskBox = document.getElementsByClassName('tasklist');
+				for (var i=0; i<taskBox.length;i++)
+				taskBox[i].classList.toggle('smooth');			
+			}
 		}
 	},
 
-	stopTimer: function(){			
-			var now = new Date().getTime();					
-			this.setState({
-							inProcess:false,
-							elapsedTime: this.state.elapsedTime  - this.state.end_dt + now,							
-							end_dt:now
-						});
-			 	
+	createNewTask: function(params){
+		var timestamp = new Date().getTime();
+		var task = {
+					id: timestamp,
+					person: this.state.person,
+					project: this.state.project,
+					comment: this.state.comment,
+					cost: this.state.cost,
+					timer: this.state.timer,
+					active: false
+				};
+
+		this.setState({
+						id: '',
+						timer: 0,	
+						person:'',
+						project:'',
+						cost:'',
+						comment:'',
+						isActive: false
+					});
+		this.props.handleTaskSubmit(task);
+	}, 
+
+	handleTimerChange: function(){
+		var result=this.state.timer;		 
+		result = Math.round(result / 60) + ':' + ( result % 60 < 10 ? "0"+result % 60: result % 60);
+		return result;
 	},
 
-	startTimer: function(){				
-			var now = new Date().getTime();
-			this.setState({
-							inProcess:true,			
-							elapsedTime: this.state.elapsedTime,				 
-							end_dt:now
-						});				 
-		},
+		
+	render: function(){
+		var me = this;
+			
+		return (
+			<div className="sidebar">		
+				<div className="task-area" onClick={this.handleKeyPress}>	
 
-	handleInProcessChange: function(){ 
-		var currState = this.state.inProcess;
-		currState ? this.stopTimer(): this.startTimer();	
+					<div className="task-area__input-box--task">  		
+						<div id={"person_input_"+this.state.id+"_label"} onClick={this.handleInputClick}>
+							{this.state.person != '' ? this.state.person : 'Описание задачи...'}
+						</div>		 						 
+						<input  id={"person_input_"+this.state.id} type="text"   className="input-box__input  hidden"  placeholder="Описание задачи..." value={this.state.person} onChange={this.handlePersonChange} onKeyUp={this.handleKeyPress} />					 
+					</div>
+
+					<div className="task-area__input-box--project"> 
+						<div id={"project_input_"+this.state.id+"_label"} onClick={this.handleInputClick}>
+							{this.state.project != '' ? this.state.project : 'Проект'}
+						</div>		
+						<input  id={"project_input_"+this.state.id} type="text"   className="input-box__input  hidden" placeholder="Проект" value={this.state.project} 		onChange={this.handleProjectChange} onKeyUp={this.handleKeyPress} />
+					</div>						
+					
+					<div className="task-area__input-box"> 
+						<div id={"comment_input_"+this.state.id+"_label"} className="input-box__comment" onClick={this.handleInputClick} />				
+					</div>
+					
+					<div className="task-area__input-box"> 
+						<div id={"cost_input_"+this.state.id+"_label"} className="input-box__cost" onClick={this.handleInputClick}> 
+					</div>		
+						
+				</div>	
+
+					<div className="task-area__input-box"> 					 
+							<div className="sidebar__timerTick"> {this.handleTimerChange()} </div>	
+					</div>
+
+					<div id="task-btn_add" className={ this.state.isActive ? "sidebar__task-btn--stop" : "sidebar__task-btn--start"} onClick={this.handleActivityChange}>
+						<p>{ this.state.isActive ? "СТОП" : "СТАРТ"}</p>
+					</div>	
+
+					<div id="commentsDiv" className="task-area__commentsDiv hidden">	
+					<label className="task-area__commentsDiv--label">Комментарии</label>
+						<textarea  id={"comment_input_"+this.state.id} type="text"   className="task-area__commentsDiv--input  hidden" placeholder="Комментарии" value={this.state.comment} onChange={this.handleCommentChange} onKeyUp={this.handleKeyPress} />
+					</div>
+
+					<div id="costDiv" className="task-area__costDiv hidden">	
+					<label className="task-area__costDiv--label">Ставка (руб/час)</label>
+						<input  id={"cost_input_"+this.state.id} type="text"   className="task-area__costDiv--input  hidden" placeholder="Ставка" value={this.state.cost} onChange={this.handleCostChange} onKeyUp={this.handleKeyPress}/>
+					</div>
+
+				</div>							
+			</div>
+		)
+	}
+});
+
+var Timer = React.createClass({
+  getInitialState: function() {
+    return {secondsElapsed: this.props.timer};
+  },
+
+  tick: function() {
+    this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+  },
+
+  componentDidMount: function() {
+    this.interval = setInterval(this.tick, 1000);
+  },
+
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
+  },
+
+  render: function() {
+    return (
+      <p>{this.state.secondsElapsed}</p>
+    );
+  }
+});
+
+var Task = React.createClass({
+	getInitialState: function(){
+		return {							
+			id: this.props.id,
+			timer: Number(this.props.timer),	
+			person:this.props.person,
+			project:this.props.project,
+			cost:this.props.cost,
+			comment:this.props.comment,
+			isActive: this.props.active
+		}
 	},
 
+	
+	handlePersonChange: function(e) {
+	    this.setState({person: e.target.value});		   
+  	},
 
-	handleEdit: function(){
-		console.log('handleEdit');
-		var handleinputBoxVisibleShowing = this.props.handleinputBoxVisibleShowing;
-		var setSelected = {
-						id:this.props.id,
-						person:this.props.person,
-						project:this.props.project,
-						task:this.props.task,	
-						cost:this.props.cost,
-						active:this.state.inProcess,
-						elapsed:this.state.elapsedTime,
-						end_dt:this.state.end_dt
-						}
-		this.props.handleinputBoxVisibleShowing(true, setSelected);
+	handleProjectChange: function(e) {
+	    this.setState({project: e.target.value});
 	},
 
+	handleCostChange: function(e) {
+		var reg = /\D/;
+	    var result = e.target.value.match( reg );
+	    result==null ? this.setState({cost: e.target.value}) :	alert('Введено не корректное число!');	 
+  	},
+
+	handleCommentChange: function(e) {
+	    this.setState({comment: e.target.value});	   
+  	},
+
+
+	handleInputClick : function(e){
+		var p = e.target;
+		var fInp = e.target.id.split('_')[0]+'_'+e.target.id.split('_')[1]+'_'+e.target.id.split('_')[2];
+		var inp = document.getElementById(fInp);
+		inp.classList.toggle('hidden');
+		p.classList.toggle('hidden');
+		inp.focus();
+		
+		if (e.target.id.split('_')[0] == 'comment'){	
+		
+		var commDiv = document.getElementById('commentsDiv_'+this.state.id);
+							commDiv.classList.toggle('hidden');
+							p.classList.toggle('hidden');
+				
+						};
+							
+		if (e.target.id.split('_')[0] == 'cost'){
+		var costDiv = document.getElementById('costDiv_'+this.state.id);
+							costDiv.classList.toggle('hidden');
+							p.classList.toggle('hidden');
+						};		
+	},
+
+	handleTimerChange: function(){
+		var result=this.state.timer;		 
+		 
+		var h = ~~(result / 3600);
+		var m = ~~((result % 3600)/60);
+		var s = result % 3600 % 60;
+
+		if (s < 10){s="0"+s};
+		if (m < 10){m="0"+m};
+		if (h < 10){h="0"+h};	 
+
+		return (h+":"+m+":"+s);
+	},
+
+	handleTimerEvent : function(){
+		 if (!this.state.isActive){		 		 	
+		 	var selTask = {
+		 		id: this.state.id,
+		 		person: this.state.person,
+		 		project: this.state.project,
+		 		comment: this.state.comment,
+		 		cost: this.state.cost,
+		 		active: true};
+		 	this.props.handleTaskResume(selTask);		 	
+		 }
+		
+	},
+
+	handleKeyPress: function(e){	
+
+			if (e.keyCode == 13){
+				console.log(e.keyCode);
+				var inpType = e.target.id.split('_');
+
+				if (inpType[0] == 'person'){
+					this.setState({person: e.target.value});	   
+					var inp = e.target;
+					var p = document.getElementById(e.target.id+'_label');
+					inp.classList.toggle('hidden');
+					p.classList.toggle('hidden');
+				}
+				if (inpType[0] == 'project'){
+					this.setState({project: e.target.value});	   
+					var inp = e.target;
+					var p = document.getElementById(e.target.id+'_label');
+					inp.classList.toggle('hidden');
+					p.classList.toggle('hidden');
+				}
+				if (inpType[0] == 'cost'){
+					var costDiv = document.getElementById('costDiv_'+this.state.id);
+					costDiv.classList.toggle('hidden');
+					this.setState({cost: e.target.value});	   
+					var inp = e.target;
+					var p = document.getElementById(e.target.id+'_label');
+					inp.classList.toggle('hidden');				
+				}
+				if (inpType[0] == 'comment'){
+					var commDiv = document.getElementById('commentsDiv_'+this.state.id);
+					commDiv.classList.toggle('hidden');
+					this.setState({comment: e.target.value});	   
+					var inp = e.target;
+					var p = document.getElementById(e.target.id+'_label');
+					inp.classList.toggle('hidden');
+				}
+				var selTask = {id: this.state.id,person: this.state.person,project: this.state.project,comment: this.state.comment,cost: this.state.cost,timer: this.state.timer,active: this.state.isActive,}
+				this.props.handleTaskChange(selTask,'ACTION_TYPE_EDIT');
+
+			
+		}
+	},
 
 	handleDelete : function(){
-		console.log('handleDelete');
-		var confirmation = confirm('Вы уверены что хотите удалить задачу?');
-		
+		var confirmation = confirm('Вы уверены что хотите удалить задачу?');		
 		if (confirmation){
-		var handleinputBoxVisibleShowing = this.props.handleinputBoxVisibleShowing;
-		var setSelected = {
-						id:this.props.id,
-						person:this.props.person,
-						project:this.props.project,
-						task:this.props.task,	
-						cost:this.props.cost
-						}
-		 
+		var setSelected = {id:this.props.id}		 
 		this.props.handleTaskChange(setSelected, 'ACTION_TYPE_DEL');
 		 }
 	},
-	
-  	render: function() {  
-  	 var elapsed = this.state.elapsedTime;  	 
-  	 var currState = this.state.inProcess;
-  	 var costPerHour = this.props.cost;  	
- 	 var sum = costPerHour * (elapsed/(1000*60*60));
-	 var setSelected = {
-						id:this.props.id,
-						person:this.props.person,
-						project:this.props.project,
-						task:this.props.task,	
-						cost:this.props.cost,
-						active: this.state.inProcess,
-						elapsed: this.state.elapsedTime,
-						end_dt:this.state.end_dt,
-						start_dt:this.props.start_dt,
-						sum: sum
-						};
 
-		localStorage.removeItem(setSelected.id);
-		localStorage.setItem(setSelected.id , JSON.stringify(setSelected));
+	calculateSum: function(){
+		var cost = this.state.cost;
+		var time = this.state.timer;
+		var result = (cost * time / 3600 );
+		return "Сумма: "+result.toFixed(2)+" руб.";
+	},
 
-     return (
-       			<div  className="task-area">					
-					<div className="task-header">
-						<div> {"ФИО: "+this.props.person} </div>
-						<div> {"Проект: "+this.props.project} </div>
-						<div className="task-header__icon_del" onClick={this.handleDelete}> </div>
-					</div>					
-					<div className="task-area__text-field">{"Комменатрии к задаче: " +this.props.task}</div>
-					<div className="task-area__text-field">{"Ставка(в час): "+this.props.cost+" руб."}</div>
-					<div className="task-area__text-field">{"Затрачено: " + (elapsed/(1000*60*60)).toFixed(2) +" часа"} </div>	
-					<div className="task-area__text-field">{"Сумма: "+sum.toFixed(2)+" руб."}</div>
-					<div className="task-area__text-field">{ currState ? 'Выполняется...' : 'Выполнены' }</div>					
-						<div className="task-area__footer">
-							<div className="task-btn" onClick={this.handleInProcessChange}> Изменить статус </div>
-							<div className="task-btn" onClick={this.handleEdit}> Редактировать </div>
-						</div>					 
-				</div>
-    );
-  }
-});	 
+	render : function(){
+		return (
+
+			<div className="task-area">
+				<div className="task-area__icon--del" onClick={this.handleDelete}> </div>
+
+				<div className="task-area__input-box--task">  		
+								<div id={"person_input_"+this.state.id+"_label"} onClick={this.handleInputClick}>
+								{
+									this.state.person != '' ? this.state.person : 'Описание задачи...'
+								}
+								</div>		 						 
+								<input  id={"person_input_"+this.state.id} type="text"   className="input-box__input  hidden"  placeholder="Описание задачи..." value={this.state.person} onChange={this.handlePersonChange} onKeyUp={this.handleKeyPress} />					 
+							</div>
+						<div className="task-area__input-box--project"> 
+							<div id={"project_input_"+this.state.id+"_label"} onClick={this.handleInputClick}>
+							{
+								this.state.project != '' ? this.state.project : 'Проект'
+							}
+							</div>		
+							<input  id={"project_input_"+this.state.id} type="text"   className="input-box__input  hidden" placeholder="Проект" value={this.state.project} 		onChange={this.handleProjectChange} onKeyUp={this.handleKeyPress} />
+						</div>						
+						
+						<div className="task-area__input-box"> 
+							<div id={"comment_input_"+this.state.id+"_label"} className="input-box__comment" onClick={this.handleInputClick} />			
+							
+						</div>
+						
+						<div className="task-area__input-box"> 
+							<div id={"cost_input_"+this.state.id+"_label"} className="input-box__cost" onClick={this.handleInputClick}> 
+								</div>		
+							
+						</div>						
+ 					
+				
+
+						<div className="task-area__input-box--timer"> 					 
+							<div className="timer__timerTick"> {this.handleTimerChange()} </div>
+							<div onClick={this.handleTimerEvent} className="timer__btn--start"></div>
+							<div className="timer__sum"> {this.calculateSum()} </div>
+						</div>
+
+
+						<div id={"commentsDiv_"+this.state.id} className="task-area__commentsDiv hidden">	
+						<label className="task-area__commentsDiv--label">Комментарии</label>
+							<textarea  id={"comment_input_"+this.state.id} type="text"   className="task-area__commentsDiv--input  hidden" placeholder="Комментарии" value={this.state.comment} onChange={this.handleCommentChange} onKeyUp={this.handleKeyPress} />
+						</div>
+
+						<div id={"costDiv_"+this.state.id} className="task-area__costDiv hidden">	
+							<label className="task-area__costDiv--label">Ставка (руб/час)</label>
+							<input  id={"cost_input_"+this.state.id} type="text"   className="task-area__costDiv--input  hidden" placeholder="Ставка" value={this.state.cost} onChange={this.handleCostChange} onKeyUp={this.handleKeyPress}/>
+						</div>
+			</div>
+		)
+	}
+});
 
 ReactDOM.render(
 			<TaskBox data={getTasksFromLocal()}/>,
 			document.getElementById('content') 
-			);
+			);			
 
 	</script> 
 
