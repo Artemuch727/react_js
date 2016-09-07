@@ -1,0 +1,19 @@
+{
+	"name": "licenseData",
+	"Plans": [{
+		"id": 1,
+		"name": "LICENSE PLAN #1",
+		"cost": 10
+	},
+	{
+		"id": 2,
+		"name": "LICENSE PLAN #2",
+		"cost": 20
+	},
+	{
+		"id": 3,
+		"name": "LICENSE PLAN #3",
+		"cost": 30
+	}],
+	"Nums":[1,5,10,15,20,25]
+ }
