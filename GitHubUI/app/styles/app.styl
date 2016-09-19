@@ -1,0 +1,762 @@
+import('sprites/*')
+import('helpers/svg-size')
+@import 'helpers/variables'
+@import 'helpers/mixins'
+@import 'helpers/fonts'
+@import 'helpers/optimize'
+
+import('../blocks/**/*')
+/** modificators **/
+ 
+.hidden{
+  display  none !important;
+}
+
+.novis{
+  visibility  hidden !important;
+}
+.smooth{
+  opacity  0.4 !important;
+}
+
+.scrollToTop {   
+  bottom  30px;
+  right  30px;
+  cursor  pointer;
+  overflow  hidden;
+  position  fixed;
+  z-index  9999;
+  width  45px;
+  height  45px;
+  background  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAASWSURBVGhDzZlLSJRRFMfn0fuJtAnSMuxBb2qbvSioRa2CoKh9ELYJIaGQimxgUsf3A8FFuREiKaFVRFRaIFhtQiwh25RlmRbNONn0P9OXjfc797v3zAMSPke/79z/+d1zz73fuXf8viz8tLW1LY7FYjsgVZxIJPYHAoECfBb5/f4RfI7j6g0Gg13xePxVSUnJAO4nsuBWLlFfX7+8oaHhOq4vjY2NCdsL9pO4hnDt6ezsDMo9p9GiqampEA4HbCENdlFolbW0tMxOA8XcBEPsh4PeLMGqIxOD7gkzhcAC0T0mhJ2C/TA6+VHYbhApM0eAxpsid+9YDHFVJBJZ6+WMUgBax6H12NQRBGljWuA0SRCpNx4OnkPcE9TLMbSvQptGhJ3Ezc3Nu6XglL+vNYJfIbhFKsjZU/Tho5vzA/+/cH+7tR80uKsR6snFTKflD/7ijM84RnOFEdxj0t00Ns7AgOA4cHRolFYurTQ95CIMwQ4pDyZdaXl5+QJJO7RZpMnzW1odNOhRodHTpxLHZAvnFx2dKNJJBI6SYBUXOGiucXHAcD0DPN7X1yd6W0GjQtGJVlZWzpd0HIBnGfARDnqQgd4qcYb2Yc2K8yMcDi+UaHE1De7946Hih3HWL3Ry2eulAYfjoVBoqa0mATJBvD/dnqo11aC6urrQ1gEmapnpLec8H6PJZqsLrs+qbir0mJqHtsJoV2oJnHzzAeS7bY7D9gijfcCHm3nMMFTZQFNZKQFOsbVaVah4go+fio/bvrq6ur2q49ra2tUmaKSEZw5bdMYKHNBvU7Vogvrw65o2bzTkHquE9Q7G8WlcDmFX6+LDjScSaNhWWERRAj9RU1OzRDeyyISDHPQnJfzfdAIpbzoJlNEWoz2mA6dU5aDVmnaYg5auEmmMxkR7e/s81Xdra2u+C5qWICXS702TUH3ORYODpkkl1UbtspKL9IydNRXfUuFcQtPWi4t0h2Qich3KJTTYzrj4MLlOqTelhyg5hp6xEU5mAhd+dOKoJEVyCc1Uey982F0EAKnuzx79D9DIAteGgHbxSTb8MZRJXucq0uBqUbnwslmWhMYD11sH9y7YRjsX0NivBtRiCf/HppmQIrMAGVV6NWV7XJALaMy1amatPz8jkDAIqUZo2G0TbWf734/2nhcidc9GDzqucpnYXG0RbapdJ1XwdI6nbMC8bMAwzES5gm0DwJOMcRzFTH6mILbt4f8GwxCjVU6rwZ3h4V6cvqKwdZyuHWAvcTULlr5iT01Eda6mQpuidTNdIFM7TYSprI2Y2iafA26TBpw2pqetRCyNnEn3jvMHXw8tZf6YYRnbBSE6bnUV8bS1xyKf0XEvLbNYdVxHF3/9wcdLz4NHXW8guo15xU93gnYcgD8s+cqB6mN60zG77NTgUIT1J6Wm8NMaDAejunSh+w4AfceCzKo/hFWoCH8XOAX8ZtiU4v9n1EkvHeeZ1fGFidvnfLPVZeHQuB/00IgiQDuNMFIDpMI6ROtDtuEBe4VqDSmPyB7gG3A9yATe2ZueEznOljHydx/gOy3ylXb9VJvQgXteJv5/A28w8y+hcQK3AAAAAElFTkSuQmCC');
+}
+/************ header ************/
+.errorDiv
+  position  absolute
+  width  60%
+  height  100px
+  padding  25px
+  text-align  center
+  top  10px
+  left 45%
+  margin-left -25%
+  margin-top  -150px
+  display  flex
+  flex-direction  row
+  justify-content  center
+  align-items  center
+  background-color  white
+  color  #f00
+  font-size  16px
+  font-weight  bold
+  z-index  1
+  box-shadow  0px 0px 21px -2px rgba(0,0,0,0.75)
+  transition  all 950ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+  visibility  hidden
+  &--show
+    margin-top  5px
+    visibility  visible
+    z-index  9999
+    transition  all 950ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+
+.userInfoBox
+  z-index 1000
+  position fixed
+  top 0px
+  background-color rgba(255,255,255,0)
+  padding 10px
+  width 100%
+  height 90px
+  display flex
+  align-items center
+  justify-content center
+  &--solid
+    background-image  linear-gradient(180deg, rgba(255,255,255,0) 60%, #fff), linear-gradient(70deg, #abafb0 32%, #abafb0)
+  &__inputBox
+    padding  10px
+    width  25%
+    height  50px
+
+.inputBox
+  padding  10px
+  width  25%
+  height  50px
+  &__label
+    position  absolute
+    line-height  22px
+    top  38px
+    transition  all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+    z-index  1
+    cursor  text
+    transform  scale(1) translate3d(100%, 0px, 0px)
+    transform-origin  left top 0px
+    pointer-events  none
+    color  rgba(0, 0, 0, 0)
+    -webkit-user-select  none
+    &--up
+      position  absolute
+      line-height  22px
+      top  38px
+      transition  all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+      z-index  1
+      cursor  text
+      transform  perspective(12px) scale(0.75) translate3d(0px, -25px, 0px)
+      transform-origin  left top 0px
+      pointer-events  none
+      color  rgb(0, 188, 212)
+      -webkit-user-select  none      
+  &__input
+    text-align  left
+    -webkit-tap-highlight-color  rgba(0, 0, 0, 0)
+    padding-left  10px
+    position  relative
+    width  100%
+    border  none
+    outline  none
+    color  rgba(0, 0, 0, 0.870588)
+    height  100%
+    box-sizing  border-box
+    background-color  rgba(0, 0, 0, 0)
+  &__dropdownList
+    width 100%
+    height 350px
+  &__hrBox
+     width  100%
+     
+
+.dropdownList
+  height 100%
+  margin-top  auto
+  list-style-type  none
+  padding-left  2px
+  margin-right  -150px
+  width  100%
+  display  none
+  opacity 0
+  outline  1px #e4e4e4 solid
+  overflow-y  scroll
+  background-color white
+  transition  all 950ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+  &--animate
+    display  block
+    margin-right  0
+    opacity  1
+    transition  all 950ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+  &__item
+    width  100%
+    height  40px
+    background  white
+    text-align  left
+    padding-left  15px
+    padding-top  13px
+    &--active 
+      width  100%
+      height  40px
+      background  #e4e4e4
+      text-align  left
+      padding-left  15px
+      padding-top  13px
+  &__item:hover   
+    background  #e4e4e4
+
+.hrBox 
+  width  100%
+  &__hr    
+    border-top  none rgb(224, 224, 224)
+    border-right  none rgb(224, 224, 224)
+    border-bottom  1px solid rgb(224, 224, 224)
+    border-left  none rgb(224, 224, 224)
+    bottom  8px
+    box-sizing  content-box
+    margin  0px
+    width  100%
+    &--def
+      border-top  none rgb(0, 188, 212)
+      border-right  none rgb(0, 188, 212)
+      border-bottom  2px solid rgb(0, 188, 212)
+      border-left  none rgb(0, 188, 212)
+      bottom  8px
+      box-sizing  content-box
+      margin  0px
+      width  100%
+      transform  scaleX(0)
+      transition  all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+    &--input
+      border-top  none rgb(0, 188, 212)
+      border-right  none rgb(0, 188, 212)
+      border-bottom  2px solid rgb(0, 188, 212)
+      border-left  none rgb(0, 188, 212)
+      bottom  8px
+      box-sizing  content-box
+      margin  0px
+      width  100%
+      transform  scaleX(1)
+      transition  all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+    &--err
+      border-top  none rgb(244, 67, 54)
+      border-right  none rgb(244, 67, 54)
+      border-bottom  2px solid rgb(244, 67, 54)
+      border-left  none rgb(244, 67, 54)
+      bottom  8px
+      box-sizing  content-box
+      margin  0px
+      width  100%
+      transform  scaleX(1)
+      transition  all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms
+/************ issue list ************/
+.issuelist
+  width  90%
+  text-align  center
+  margin  110px auto
+  &__issueBox
+    border  1px solid #e5e5e5
+
+.issueBox
+  border  1px solid #e5e5e5
+  display  flex
+  margin  0 10px
+  justify-content  space-between
+  &:hover
+    background-color rgba(1, 1, 1, 0.02)
+  &__author
+    display  flex
+    flex-direction  column
+    align-items  center
+    min-width  5%
+    overflow  hidden
+    padding  0 5px
+  &__content
+    display  flex
+    flex-direction  column
+    align-items  flex-start
+    justify-content  center
+    width  100%
+    height  100%
+    padding  5px
+    margin  auto
+
+.author
+  &__img
+    width  36px
+    height  36px
+    margin  10px
+  &__login
+    font-size 12px
+
+.login 
+  &__link
+    color rgb(51, 51, 51) !important
+    text-decoration  none !important
+  &__link:hover
+    color  #4078c0 !important
+    cursor  pointer !important
+
+.content
+  line-height 1.5em
+  &__issueTitle
+    height  100%
+    padding  13px
+    width  100%
+    color  #767676
+    border-bottom  1px solid #ddd
+    border-top-left-radius  3px
+    border-top-right-radius  3px
+    padding  2px
+    font-weight  bold
+    display  flex
+    justify-content  space-between
+  &__info
+    padding  2px
+    font-size  12px
+
+.title 
+  &__link
+    padding  1px
+    font-weight  bold
+    text-decoration  inherit
+    color rgb(51, 51, 51)
+  &__link:hover
+    color  #4078c0
+    cursor  pointer
+  &__comments
+    padding-top  10px
+    display  flex
+    justify-content  space-around
+    align-items  center
+    width  50px
+    height  35px
+    padding  5px
+    margin  5px 5px
+    color  #181717
+
+.info
+  &__link
+  &__text
+    margin-top  -5px
+    margin-right  5px
+    z-index  5
+    position  absolute
+    font-size  15px
+    font-weight  bold
+
+/************ issue list ends ************/
+/************ commemts *******************/
+.commentsList
+  margin  100px auto
+  width  90%
+  &__issueBox
+    position  relative
+    outline  1px solid #ddd
+    height  100%
+    box-sizing  border-box
+  &__comments
+    position inherit
+
+.issueBox
+  &__title
+    font-weight  bold
+    height  35px
+    padding  10px
+    background-color  #f7f7f7
+  &__content
+    margin  5px auto
+    width  100%
+    text-align  left
+    line-height  1.7em
+
+.comments
+  display  flex
+  align-items  flex-start
+  padding  15px
+  &__author
+    padding  10px 5px
+  &__content
+    outline  1px solid #ddd
+    margin  10px
+    height  100%
+    width  100%
+
+.author
+  &__img
+    position inherit
+
+.content
+  &__commentTitle 
+    height  100%
+    padding  13px
+    width  100%
+    color  #767676
+    background-color  #f7f7f7
+    border-bottom  1px solid #ddd
+    border-top-left-radius  3px
+    border-top-right-radius  3px
+  &__body
+    width  100%
+    padding  15px
+    overflow  visible
+    font-size  14px
+    line-height  1.5
+    word-wrap  break-word
+
+.title 
+  &__link
+    font-size  16px
+    font-weight  bold
+    padding  1px
+    font-weight  bold
+    text-decoration  inherit
+    color  #333
+  &__link:hover
+    color  #4078c0
+  &__dt
+    font-size  14px
+/******** comments end *************/
+/********* paginator ***************/
+.search-footer
+  display  block
+  margin  0 auto
+
+.paginator
+  width  80%
+  margin  25px auto
+  text-align  center
+
+.pagination
+  display  inline-block
+  margin  20px auto
+  border-radius  4px
+ 
+.pageNavigation
+  width  100%
+  height  100%
+  &__pageList
+    display  inline-flex
+  &__itemSelector
+    margin-left  10px
+    
+.pageList
+  &__item
+    position  relative
+    float  left
+    padding  6px 12px
+    margin-left  -1px
+    line-height  1.6
+    color  #337ab7 !important
+    border  1px solid #ddd !important
+    background-color  #fff !important
+    text-decoration  none !important
+  &__item:hover
+    background-color  #e7e7e7 !important
+    border-color  #e5e5e5 !important
+    &--active
+      z-index  3
+      color  #fff !important
+      cursor  default
+      background-color  #337ab7 !important
+      border-color  #337ab7 !important
+
+/********** paginator ends*************/
+/****** spinner-begins from Web*********/
+.spinner
+  text-align  center
+  &__layout
+    width  44px
+    height 44px
+    z-index  9999
+
+.spinner__layout .wBall {
+  position  absolute;
+  width  42px;
+  height  42px;
+  opacity  0;
+  transform  rotate(225deg);
+    -o-transform  rotate(225deg);
+    -ms-transform  rotate(225deg);
+    -webkit-transform  rotate(225deg);
+    -moz-transform  rotate(225deg);
+  animation  orbit 5.7425s infinite;
+    -o-animation  orbit 5.7425s infinite;
+    -ms-animation  orbit 5.7425s infinite;
+    -webkit-animation  orbit 5.7425s infinite;
+    -moz-animation  orbit 5.7425s infinite;
+}
+
+.spinner__layout .wBall .wInnerBall{
+  position  absolute;
+  width  5px;
+  height  5px;
+  background  rgb(0,0,0);
+  left 0px;
+  top 0px;
+  border-radius  5px;
+}
+
+.spinner__layout #wBall_1 {
+  animation-delay  1.256s;
+    -o-animation-delay  1.256s;
+    -ms-animation-delay  1.256s;
+    -webkit-animation-delay  1.256s;
+    -moz-animation-delay  1.256s;
+}
+
+.spinner__layout #wBall_2 {
+  animation-delay  0.243s;
+    -o-animation-delay  0.243s;
+    -ms-animation-delay  0.243s;
+    -webkit-animation-delay  0.243s;
+    -moz-animation-delay  0.243s;
+}
+
+.spinner__layout #wBall_3 {
+  animation-delay  0.5065s;
+    -o-animation-delay  0.5065s;
+    -ms-animation-delay  0.5065s;
+    -webkit-animation-delay  0.5065s;
+    -moz-animation-delay  0.5065s;
+}
+
+.spinner__layout #wBall_4 {
+  animation-delay  0.7495s;
+    -o-animation-delay  0.7495s;
+    -ms-animation-delay  0.7495s;
+    -webkit-animation-delay  0.7495s;
+    -moz-animation-delay  0.7495s;
+}
+
+.spinner__layout #wBall_5 {
+  animation-delay  1.003s;
+    -o-animation-delay  1.003s;
+    -ms-animation-delay  1.003s;
+    -webkit-animation-delay  1.003s;
+    -moz-animation-delay  1.003s;
+}
+
+@keyframes orbit {
+  0% {
+    opacity  1;
+    z-index 99;
+    transform  rotate(180deg);
+    animation-timing-function  ease-out;
+  }
+
+  7% {
+    opacity  1;
+    transform  rotate(300deg);
+    animation-timing-function  linear;
+    origin 0%;
+  }
+
+  30% {
+    opacity  1;
+    transform rotate(410deg);
+    animation-timing-function  ease-in-out;
+    origin 7%;
+  }
+
+  39% {
+    opacity  1;
+    transform  rotate(645deg);
+    animation-timing-function  linear;
+    origin 30%;
+  }
+
+  70% {
+    opacity  1;
+    transform  rotate(770deg);
+    animation-timing-function  ease-out;
+    origin 39%;
+  }
+
+  75% {
+    opacity  1;
+    transform  rotate(900deg);
+    animation-timing-function  ease-out;
+    origin 70%;
+  }
+
+  76% {
+  opacity  0;
+    transform rotate(900deg);
+  }
+
+  100% {
+  opacity  0;
+    transform  rotate(900deg);
+  }
+}
+
+@-o-keyframes orbit {
+  0% {
+    opacity  1;
+    z-index 99;
+    -o-transform  rotate(180deg);
+    -o-animation-timing-function  ease-out;
+  }
+
+  7% {
+    opacity  1;
+    -o-transform  rotate(300deg);
+    -o-animation-timing-function  linear;
+    -o-origin 0%;
+  }
+
+  30% {
+    opacity  1;
+    -o-transform rotate(410deg);
+    -o-animation-timing-function  ease-in-out;
+    -o-origin 7%;
+  }
+
+  39% {
+    opacity  1;
+    -o-transform  rotate(645deg);
+    -o-animation-timing-function  linear;
+    -o-origin 30%;
+  }
+
+  70% {
+    opacity  1;
+    -o-transform  rotate(770deg);
+    -o-animation-timing-function  ease-out;
+    -o-origin 39%;
+  }
+
+  75% {
+    opacity  1;
+    -o-transform  rotate(900deg);
+    -o-animation-timing-function  ease-out;
+    -o-origin 70%;
+  }
+
+  76% {
+  opacity  0;
+    -o-transform rotate(900deg);
+  }
+
+  100% {
+  opacity  0;
+    -o-transform  rotate(900deg);
+  }
+}
+
+@-ms-keyframes orbit {
+  0% {
+    opacity  1;
+    z-index 99;
+    -ms-transform  rotate(180deg);
+    -ms-animation-timing-function  ease-out;
+  }
+
+  7% {
+    opacity  1;
+    -ms-transform  rotate(300deg);
+    -ms-animation-timing-function  linear;
+    -ms-origin 0%;
+  }
+
+  30% {
+    opacity  1;
+    -ms-transform rotate(410deg);
+    -ms-animation-timing-function  ease-in-out;
+    -ms-origin 7%;
+  }
+
+  39% {
+    opacity  1;
+    -ms-transform  rotate(645deg);
+    -ms-animation-timing-function  linear;
+    -ms-origin 30%;
+  }
+
+  70% {
+    opacity  1;
+    -ms-transform  rotate(770deg);
+    -ms-animation-timing-function  ease-out;
+    -ms-origin 39%;
+  }
+
+  75% {
+    opacity  1;
+    -ms-transform  rotate(900deg);
+    -ms-animation-timing-function  ease-out;
+    -ms-origin 70%;
+  }
+
+  76% {
+  opacity  0;
+    -ms-transform rotate(900deg);
+  }
+
+  100% {
+  opacity  0;
+    -ms-transform  rotate(900deg);
+  }
+}
+
+@-webkit-keyframes orbit {
+  0% {
+    opacity  1;
+    z-index 99;
+    -webkit-transform  rotate(180deg);
+    -webkit-animation-timing-function  ease-out;
+  }
+
+  7% {
+    opacity  1;
+    -webkit-transform  rotate(300deg);
+    -webkit-animation-timing-function  linear;
+    -webkit-origin 0%;
+  }
+
+  30% {
+    opacity  1;
+    -webkit-transform rotate(410deg);
+    -webkit-animation-timing-function  ease-in-out;
+    -webkit-origin 7%;
+  }
+
+  39% {
+    opacity  1;
+    -webkit-transform  rotate(645deg);
+    -webkit-animation-timing-function  linear;
+    -webkit-origin 30%;
+  }
+
+  70% {
+    opacity  1;
+    -webkit-transform  rotate(770deg);
+    -webkit-animation-timing-function  ease-out;
+    -webkit-origin 39%;
+  }
+
+  75% {
+    opacity  1;
+    -webkit-transform  rotate(900deg);
+    -webkit-animation-timing-function  ease-out;
+    -webkit-origin 70%;
+  }
+
+  76% {
+  opacity  0;
+    -webkit-transform rotate(900deg);
+  }
+
+  100% {
+  opacity  0;
+    -webkit-transform  rotate(900deg);
+  }
+}
+
+@-moz-keyframes orbit {
+  0% {
+    opacity  1;
+    z-index 99;
+    -moz-transform  rotate(180deg);
+    -moz-animation-timing-function  ease-out;
+  }
+
+  7% {
+    opacity  1;
+    -moz-transform  rotate(300deg);
+    -moz-animation-timing-function  linear;
+    -moz-origin 0%;
+  }
+
+  30% {
+    opacity  1;
+    -moz-transform rotate(410deg);
+    -moz-animation-timing-function  ease-in-out;
+    -moz-origin 7%;
+  }
+
+  39% {
+    opacity  1;
+    -moz-transform  rotate(645deg);
+    -moz-animation-timing-function  linear;
+    -moz-origin 30%;
+  }
+
+  70% {
+    opacity  1;
+    -moz-transform rotate(770deg);
+    -moz-animation-timing-function  ease-out;
+    -moz-origin 39%;
+  }
+
+  75% {
+    opacity  1;
+    -moz-transform  rotate(900deg);
+    -moz-animation-timing-function  ease-out;
+    -moz-origin 70%;
+  }
+
+  76% {
+  opacity  0;
+    -moz-transform rotate(900deg);
+  }
+
+  100% {
+  opacity  0;
+    -moz-transform rotate(900deg);
+  }
+}

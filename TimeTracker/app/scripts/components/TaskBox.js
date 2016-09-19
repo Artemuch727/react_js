@@ -1,9 +1,9 @@
-var Actions = require('../actions/actions');
-var Sidebar = require('./Sidebar');
-var TaskList = require('./TaskList');
-var React = require('react');
+const Actions = require('../actions/actions');
+const Sidebar = require('./Sidebar');
+const TaskList = require('./TaskList');
+const React = require('react');
 
-var TaskBox = React.createClass({	
+const TaskBox = React.createClass({	
 	getInitialState: function(){
 		return {
 			data : this.props.data,
@@ -11,13 +11,12 @@ var TaskBox = React.createClass({
 		}
 	},
 
-
 	handleTaskSubmit: function(task) {	  	
-	    localStorage.setItem(task.id ,  JSON.stringify(task));
-	    this.setState({
-	    				data:  Actions.getTasksFromLocal(),
-	    				selected: {} 
-	    			});
+		localStorage.setItem(task.id ,  JSON.stringify(task));
+		this.setState({
+			data: Actions.getTasksFromLocal(),
+			selected: {} 
+		});
 	},
 
 	handleTaskResume : function(task){
@@ -26,11 +25,10 @@ var TaskBox = React.createClass({
 
 	handleTaskChange: function(task, type){
 		var tasks = this.state.data;
-	    
-		 	if (type == 'ACTION_TYPE_EDIT') editSelected(this);
-	   		if (type == 'ACTION_TYPE_DEL') delSelected(this);
+		if (type == 'ACTION_TYPE_EDIT') editSelected(this);
+		if (type == 'ACTION_TYPE_DEL') delSelected(this);
 
-	   	function editSelected(me){
+		function editSelected(me){
 			localStorage.removeItem(task.id);
 			localStorage.setItem(task.id , JSON.stringify(task));
 			me.setState({data: Actions.getTasksFromLocal()});
@@ -42,8 +40,7 @@ var TaskBox = React.createClass({
 		}
 	},
 
-	render:   function(){
-		
+	render:   function(){		
 		return  (
 			<div className="tasklist-content">
 				<Sidebar 

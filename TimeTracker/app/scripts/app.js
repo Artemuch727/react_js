@@ -21,9 +21,8 @@ const muiTheme = getMuiTheme({
 
 injectTapEventPlugin();
 render( <MuiThemeProvider >
-        		<div>
-     				 <TaskBox data={Actions.getTasksFromLocal()} 
-        				/>
-        		</div>
-      		</MuiThemeProvider>, 
-      		document.getElementById('content'));
+    		<div>
+ 				 <TaskBox data={Actions.getTasksFromLocal()} />
+    		</div>
+  		</MuiThemeProvider>, 
+	document.getElementById('content'));
