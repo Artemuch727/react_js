@@ -1,32 +1,30 @@
-var Task= require('./Task');
-var React = require('react');
+//	Task list view
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-var TaskList = React.createClass({
-	render: function() {
-		var me = this;
-		var taskNodes = this.props.data.map(function(task){		 
-			return (
-				<Task 
-					handleTaskSubmit = {me.props.handleTaskSubmit}
-					handleTaskChange = {me.props.handleTaskChange}
-					handleTaskResume = {me.props.handleTaskResume}
-					id={task.id} 
-					person={task.person} 
-					key={task.id+'_key'} 
-					project={task.project} 
-					comment={task.comment} 
-					timer={task.timer} 
-					active={task.active}		 	
-					cost={task.cost}		 
-					/>
-			);
-		});
+
+const mapStateToProps = state => {
+	return {
+		taskList: state.taskList
+	};
+};
+class TaskList extends Component {
+	render() {
+		const { taskList } = this.props;
 		return (
-			<div className='tasklist'>
-				{taskNodes}
-			</div>
-		);
+			<ul>
+				{
+					taskList.map((item, idx) => {
+						return(
+							<li key = {idx}>
+								<h2>{item.properties.description}, {item.properties.project}, {item.properties.comments}, {item.properties.cost}</h2>
+							</li>
+						)
+					})
+				}
+			</ul>
+		)
 	}
-});
+}
 
-module.exports = TaskList;
+export default connect(mapStateToProps)(TaskList);

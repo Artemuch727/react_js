@@ -3,9 +3,10 @@ import React from 'react';
 class Timer extends React.Component{
 	constructor(props) {
 		super(props);
-		this.tick = this.tick.bind(this);	
+		this.tick = this.tick.bind(this);
 		this.state = {
-			secondsElapsed: this.props.timer
+			secondsElapsed: this.props.task.properties.timer
+			//secondsElapsed: 0//this.props.timer
 		}
 	}
 
@@ -22,9 +23,13 @@ class Timer extends React.Component{
 	}
 
 	render() {
-		return	
-			<div>{this.state.secondsElapsed}</div>
+		return (
+			<div>
+				Timer:	{this.state.secondsElapsed}
+			</div>
+		)
 	}
-};
+}
 
 module.exports = Timer;
+

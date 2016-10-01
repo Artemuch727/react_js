@@ -12,19 +12,26 @@ export const stopTask = (item) => {
   };
 };
 
-export const deleteTask = (id) => {
-  return {
-    type: 'DELETE_TASK',
-    item: item
-  };
-};
 
 export const editTask = (item) => {
   return {
     type: 'EDIT_TASK',
-    item: item
+	item: item
   };
 };
 
+/****************************************/
 
+export const addTask = (item) => {
+	return {
+		type: 'ADD_TASK',
+		item: item
+	};
+};
 
+export const deleteTask = (item) => {
+	return {
+		type: 'DELETE_TASK',
+		item: item
+	};
+};
