@@ -1,35 +1,53 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {startTimer, stopTimer, editTask} from '../actions'
 
+
+const mapStateToProps = state => {
+	return {
+		task: state.taskActions.task
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		startTimer: (task) => {
+			dispatch(startTimer(task));
+		},
+		stopTimer: (task) => {
+			dispatch(stopTimer(task))
+		},
+		timerTick: (newPropValue) => {
+			dispatch(editTask( 'timer', newPropValue))
+		}
+	};
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
 class Timer extends React.Component{
-	constructor(props) {
-		super(props);
-		this.tick = this.tick.bind(this);
-		this.state = {
-			secondsElapsed: this.props.task.properties.timer
-			//secondsElapsed: 0//this.props.timer
+	tick() {
+		const {task, timerTick} = this.props;
+		timerTick(task.properties.timer + 1);
+	}
+
+	toggleTimer() {
+		const {task} = this.props;
+		if (task.enabled) {
+			clearInterval(this.interval);
+		} else {
+			this.interval = setInterval(this.tick.bind(this), 1000);
 		}
 	}
 
-	tick() {
-		this.setState({secondsElapsed: this.state.secondsElapsed + 1});
-	}
-
-	componentWillMount(){
-		this.interval = setInterval(this.tick, 1000);
-	}
-
-	componentWillUnmount() {
-		 clearInterval(this.interval);
-	}
-
 	render() {
+		const {task} = this.props;
 		return (
 			<div>
-				Timer:	{this.state.secondsElapsed}
+				<span onClick={this.toggleTimer.bind(this)}> Timerr: </span>	{task.properties.timer}
 			</div>
 		)
 	}
 }
 
-module.exports = Timer;
+export default Timer;
 
