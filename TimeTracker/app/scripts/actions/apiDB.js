@@ -1,5 +1,5 @@
 const apiDB = {
-	getTasksFromLocal: () => {
+	getTasksFromLStorage: () => {
 		let resultTasks = [];
 		let index = 1;
 		let TaskForExport = {};
@@ -9,7 +9,6 @@ const apiDB = {
 					taskId: JSON.parse(localStorage.getItem(element)).taskId,
 					active: JSON.parse(localStorage.getItem(element)).enabled,
 					properties: JSON.parse(localStorage.getItem(element)).properties
-					//timer: JSON.parse(localStorage.getItem(element)).timer
 				};
 				index++;
 				resultTasks.push(TaskForExport);
@@ -17,9 +16,13 @@ const apiDB = {
 		}
 		return resultTasks;
 	},
-	addNewTaskToStorage: (task) => {
+	addNewTaskToLStorage: (task) => {
 		localStorage.setItem("task_"+task.taskId, JSON.stringify(task));
+	},
+	deleteTaskFromLStorage: (task) => {
+		localStorage.removeItem("task_"+ task.taskId);
 	}
 };
 
 module.exports = apiDB;
+

@@ -1,6 +1,6 @@
 import apiDB from '../actions/apiDB';
 
-const taskList = (state = {list: apiDB.getTasksFromLocal()}, action) => {
+const taskList = (state = {list: apiDB.getTasksFromLStorage()}, action) => {
 	switch (action.type) {
 		case 'ADD_TASK': {
 			return {...state, list: [...state.list, {...action.item, enabled: false}]};

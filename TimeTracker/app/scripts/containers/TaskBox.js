@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import apiDB from '../actions/apiDB';
 //import actions
 import TaskList from '../components/TaskList';
 import InputField from '../components/InputField/InputField';
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => {
 		},
 		stopTask: (task) => {
 			dispatch(addTaskToStorage(task));
+			apiDB.addNewTaskToLStorage(task);
 			dispatch(stopTask(task));
 		},
 		editTask: (changedPropName, newPropValue ) => {
@@ -122,10 +124,10 @@ class TaskBox extends Component {
 					/>
 					{this.handleTimerChange()}
 					<Button
+						type = "timer"
 						enabled = {task.enabled}
 						toggleTask = {this.toggleTask.bind(this)}
 					/>
-					<button onClick = {this.toggleTask.bind(this)} > !START! </button>
 				</div>
 				<TaskList />
 			</div>

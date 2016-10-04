@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import InputField from '../components/InputField/InputField';
+import Button from '../components/Button/Button';
 
 class Task extends Component {
 	calcSum(task) {
@@ -32,6 +33,11 @@ class Task extends Component {
 				<h2>Sum: {this.calcSum(item)}</h2>
 
 				<button onClick={deleteTask}> DelTask </button>
+
+				<Button
+					type = "delete"
+					toggleTask = {deleteTask}
+				/>
 			</li>
 		)
 	}

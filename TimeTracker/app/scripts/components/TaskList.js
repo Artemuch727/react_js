@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { editTaskStorage, deleteTask } from '../actions'
 import Task from './Task';
+import apiDB from '../actions/apiDB';
 
 
 const mapStateToProps = state => {
@@ -39,6 +40,7 @@ class TaskList extends Component {
 	deleteTask(taskId) {
 		const { deleteTaskFromStore } = this.props;
 		deleteTaskFromStore(taskId);
+		apiDB.deleteTaskFromLStorage(taskId);
 	}
 
 	render() {

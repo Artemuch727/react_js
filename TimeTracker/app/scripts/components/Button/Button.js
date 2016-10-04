@@ -7,14 +7,24 @@ class Button extends Component {
 	render() {
 		const { type, toggleTask, enabled} = this.props;
 		let btnText,btnClassName;
-
-		if (!enabled){
-			btnText = "СТАРТ";
-			btnClassName = "button__btn--start"
-		} else {
-			btnText = "СТОП";
-			btnClassName = "button__btn--stop"
+		switch (type) {
+			case 'timer':
+				if (!enabled) {
+					btnText = "СТАРТ";
+					btnClassName = "button__btn--start"
+				} else {
+					btnText = "СТОП";
+					btnClassName = "button__btn--stop"
+				}
+				break;
+			case 'delete':
+				btnText = "УДАЛИТЬ";
+				btnClassName = "button__btn--stop"
+				break;
+			default:
+				break;
 		}
+
 		return (
 			<div className="button">
 				<div className = {btnClassName} onClick = {toggleTask}> {btnText} </div>
