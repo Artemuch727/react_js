@@ -1,7 +1,8 @@
 //	Task list view
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {startTask, stopTask, editTaskStorage, addTask, deleteTask} from '../actions'
+import { editTaskStorage, deleteTask } from '../actions'
+import Task from './Task';
 
 
 const mapStateToProps = state => {
@@ -12,22 +13,17 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		startTask: (task) => {
-
-		},
 		editTask: (taskId, newPropValue, changedPropName) => {
 			dispatch(editTaskStorage(taskId, newPropValue, changedPropName))
 		},
-		deleteTask: (task) => {
-			dispatch(deleteTask(task));
+		deleteTaskFromStore: (taskId) => {
+			dispatch(deleteTask(taskId));
 		},
 	};
 };
 
-
+@connect(mapStateToProps, mapDispatchToProps)
 class TaskList extends Component {
-
-
 	taskEdit(ev) {
 		const { editTask } = this.props;
 		let	newPropValue = ev.target.value;
@@ -36,28 +32,37 @@ class TaskList extends Component {
 		editTask(ev.target.parentElement.id, changedPropName, newPropValue);
 	}
 
+	calcSum(task) {
+		return task.properties.cost * task.properties.timer;
+	}
+
+	deleteTask(taskId) {
+		const { deleteTaskFromStore } = this.props;
+		deleteTaskFromStore(taskId);
+	}
+
 	render() {
 		const { taskList } = this.props;
+		if (taskList){}
 		return (
 			<ul>
 				{
-					taskList.map((item, idx) => {
-						if (!item.enabled)
-							return(
-								<li key = {idx}  id = {item.taskId} className="task-area">
-										<input name="description" type="text" value={item.properties.description}  onInput={this.taskEdit.bind(this)} />
-										<input name="project" type="text" value={item.properties.project}  onInput={this.taskEdit.bind(this)} />
-										<input name="comments" type="text" value={item.properties.comments}   onInput={this.taskEdit.bind(this)}/>
-										<input name="cost" type="number" value={item.properties.cost}  onInput={this.taskEdit.bind(this)}/>
-										<h2>{item.properties.timer}</h2>
-										<h1> DelTask  TaskBox </h1>
-								</li>
-							)
-					})
+						taskList.map((item) => {
+							if (!item.enabled)
+								return(
+									<Task
+										key = {item.taskId}
+										item = {item}
+										deleteTask = {this.deleteTask.bind(this, item)}
+										taskEdit = {this.taskEdit.bind(this)}
+									/>
+								)
+						})
 				}
 			</ul>
 		)
 	}
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(TaskList);
+
+export default TaskList;

@@ -3,7 +3,6 @@ const defaultState = {
 	enabled: false,
 	properties: {
 		description: '',
-		project: '',
 		comments: '',
 		cost: 0,
 		timer: 0
@@ -20,8 +19,6 @@ const taskActions = (state = {task: defaultState}, action) => {
 			switch (action.item.propName) {
 				case 'description':
 					return {...state, task: {...state.task, properties: {...state.task.properties, description: action.item.newProp}}};
-				case 'project':
-					return {...state, task: {...state.task, properties: {...state.task.properties, project: action.item.newProp}}};
 				case 'comments':
 					return {...state, task: {...state.task, properties: {...state.task.properties, comments: action.item.newProp}}};
 				case 'cost':

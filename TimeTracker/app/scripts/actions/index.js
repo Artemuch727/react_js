@@ -5,10 +5,9 @@ export const startTask = (item) => {
   };
 };
 
-export const stopTask = (item) => {
+export const stopTask = () => {
   return {
-    type: 'STOP_TASK',
-    item: item
+    type: 'STOP_TASK'
   };
 };
 

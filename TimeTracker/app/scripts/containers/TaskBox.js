@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 //import actions
-import Timer from '../components/Timer';
-import SideBar from '../components/Sidebar';
 import TaskList from '../components/TaskList';
-import {startTask, stopTask, editTask, addTaskToStorage, deleteTask, editTaskStorage} from '../actions'
+import InputField from '../components/InputField/InputField';
+import Button from '../components/Button/Button';
+
+import {startTask, stopTask, editTask, addTaskToStorage} from '../actions'
 
 const mapStateToProps = (state) => {
 	return {
@@ -12,23 +13,21 @@ const mapStateToProps = (state) => {
 	};
 };
 
+
 const mapDispatchToProps = dispatch => {
 	return {
 		startTask: (task) => {
 			dispatch(startTask(task));
 		},
 		stopTask: (task) => {
+			dispatch(addTaskToStorage(task));
 			dispatch(stopTask(task));
 		},
 		editTask: (changedPropName, newPropValue ) => {
 			dispatch(editTask(changedPropName, newPropValue));
-		},
-		deleteTask: (task) => {
-			dispatch(deleteTask(task));
 		}
 	};
 };
-
 
 @connect(mapStateToProps, mapDispatchToProps)
 class TaskBox extends Component {
@@ -37,7 +36,6 @@ class TaskBox extends Component {
 		const {task, editTask} = this.props;
 		editTask('timer', task.properties.timer + 1 );
 	}
-
 
 	toggleTimer() {
 		const {task} = this.props;
@@ -50,7 +48,6 @@ class TaskBox extends Component {
 
 	toggleTask() {
 		const { task, startTask, stopTask } = this.props;
-
 
 		if (!task.enabled) {
 			let timestamp = new Date().getTime();
@@ -80,19 +77,55 @@ class TaskBox extends Component {
 		editTask(changedPropName, newPropValue);
 	}
 
+	handleTimerChange(){
+		const { task } = this.props;
+		var result = task.properties.timer;
+		var h = ~~(result / 3600);
+		var m = ~~((result % 3600)/60);
+		var s = result % 3600 % 60;
+
+		if (s < 10){
+			s="0"+s;
+		}
+		if (m < 10){
+			m="0"+m;
+		}
+		if (h < 10){
+			h="0"+h;
+		}
+
+		return (h+":"+m+":"+s)
+	}
+
 	render() {
 		const { task } = this.props;
 		return (
 			<div>
 				<div className="task-area">
-					<h1 onClick = {this.toggleTask.bind(this)} > START </h1>
-					<input name="description" type="text" onInput={this.taskEdit.bind(this)} value={task.properties.description}/>
-					<input name="project" type="text" onInput={this.taskEdit.bind(this)} value={task.properties.project}/>
-					<input name="comments" type="text" onInput={this.taskEdit.bind(this)} value={task.properties.comments}/>
-					<input name="cost" type="number" onInput={this.taskEdit.bind(this)} value={task.properties.cost}/>
-					<br/>
-					<h2>{task.properties.description}, {task.properties.project}, {task.properties.comments}, {task.properties.cost}, {task.properties.timer}</h2>
-					<hr/>
+					<InputField
+						name = "description"
+						type = "text"
+						item = {task}
+						onInput = {this.taskEdit.bind(this)}
+					/>
+					<InputField
+						name = "comments"
+						type = "text"
+						item = {task}
+						onInput = {this.taskEdit.bind(this)}
+					/>
+					<InputField
+						name = "cost"
+						type = "number"
+						item = {task}
+						onInput = {this.taskEdit.bind(this)}
+					/>
+					{this.handleTimerChange()}
+					<Button
+						enabled = {task.enabled}
+						toggleTask = {this.toggleTask.bind(this)}
+					/>
+					<button onClick = {this.toggleTask.bind(this)} > !START! </button>
 				</div>
 				<TaskList />
 			</div>
