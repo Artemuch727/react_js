@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import apiDB from '../actions/apiDB';
 //import actions
-import TaskList from '../components/TaskList';
+import TaskList from './TaskList';
 import InputField from '../components/InputField/InputField';
 import Button from '../components/Button/Button';
 
@@ -22,8 +22,9 @@ const mapDispatchToProps = dispatch => {
 		},
 		stopTask: (task) => {
 			dispatch(addTaskToStorage(task));
-			apiDB.addNewTaskToLStorage(task);
 			dispatch(stopTask(task));
+			apiDB.addNewTaskToLStorage(task);
+
 		},
 		editTask: (changedPropName, newPropValue ) => {
 			dispatch(editTask(changedPropName, newPropValue));
@@ -57,11 +58,14 @@ class TaskBox extends Component {
 				taskId: timestamp,
 				enabled: true
 			};
+
 			startTask(newTask);
+			this.toggleTimer();
 		} else {
+			this.toggleTimer();
 			stopTask(task);
 		}
-		this.toggleTimer();
+
 
 	}
 
@@ -103,7 +107,7 @@ class TaskBox extends Component {
 		const { task } = this.props;
 		return (
 			<div>
-				<div className="task-area">
+				<div className="headerTask">
 					<InputField
 						name = "description"
 						type = "text"
@@ -122,7 +126,12 @@ class TaskBox extends Component {
 						item = {task}
 						onInput = {this.taskEdit.bind(this)}
 					/>
-					{this.handleTimerChange()}
+					<div className = {task.enabled ? "timerBox--vis": "timerBox"}>
+						<div className="timerBox__timer"></div>
+						<div className="timerBox__timer--value">{this.handleTimerChange()}</div>
+					</div>
+
+
 					<Button
 						type = "timer"
 						enabled = {task.enabled}

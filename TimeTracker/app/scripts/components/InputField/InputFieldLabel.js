@@ -7,10 +7,8 @@ class InputFieldLabel extends Component {
 	render() {
 		const { label, isFocused} = this.props;
 		let className = (isFocused ? "inputBox__label--up" : "inputBox__label");
-		return (
-			<div>
-				<label className = {className} > {label} </label>
-			</div>
+		return	(
+			<label className = {className} > {label} </label>
 		)
 	}
 }

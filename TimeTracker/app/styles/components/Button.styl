@@ -1,11 +1,20 @@
 .button
   width 100px
   text-align center
+  color white
+  font-weight bold
   &__btn
-	  font-weight bold
 	  &--start
+		  border-radius 5px
 		  padding 15px
-		  background-color green
+		  background-color rgba(0,128,0,0.5)
+	  &--start:hover
+		  background-color rgba(0,128,0,1)
+		  transition all 0.2s linear
 	  &--stop
+		  border-radius 5px
 		  padding 15px
-		  background-color red
+		  background-color rgba(255,0,0,0.5)
+	  &--stop:hover
+		  background-color rgba(255,0,0,1)
+		  transition all 0.2s linear

@@ -3,7 +3,7 @@ import apiDB from '../actions/apiDB';
 const taskList = (state = {list: apiDB.getTasksFromLStorage()}, action) => {
 	switch (action.type) {
 		case 'ADD_TASK': {
-			return {...state, list: [...state.list, {...action.item, enabled: false}]};
+			return {...state, list: [...state.list, {...action.item,  enabled: false}]};
 		}
 		case 'EDIT_TASK_LIST':
 			switch (action.item.propName) {
@@ -33,7 +33,6 @@ const taskList = (state = {list: apiDB.getTasksFromLStorage()}, action) => {
 				}
 			});
 			return {...state, list:[...state.list.slice(0, idxDelete),  ...state.list.slice(idxDelete + 1)]};
-
 		}
 		default:
 			return state;

@@ -6,8 +6,8 @@ import { createStore } from 'redux'
 import taskStore from './reducer';
 import TaskBox from './containers/TaskBox';
 
-// let store = createStore(taskStore);
-let store = createStore(taskStore, window.devToolsExtension && window.devToolsExtension());
+ let store = createStore(taskStore);
+//let store = createStore(taskStore, window.devToolsExtension && window.devToolsExtension());
 
 render(
 	<Provider store = {store}>

@@ -8,20 +8,33 @@ import('helpers/svg-size')
 //import('../blocks/**/*')
 
 @import 'components/TaskBox'
+@import 'components/Task'
 @import 'components/InputField'
 @import 'components/Button'
 
 .content
-  font-family Roboto, sans-serif
+  font-family "RobotoRegular", sans-serif
 
-.tasklist-content
-  width 100%
+.timerBox
+	position relative
+	visibility hidden
+	&--vis
+	  visibility visible
+	  position relative
+	&__timer
+	  border 16px solid #f3f3f3 /* Light grey */
+	  border-top 16px solid #3498db /* Blue */
+	  border-radius 50%
+	  width 120px
+	  height 120px
+	  animation spin 2s linear infinite
+	  position relative
+	  &--value
+		  position absolute
+		  top 45%
+		  left 25%
 
-.tasklist
-  margin-top 50px
-
-.hidden
-  display none
-
-.smooth
-  opacity 0.4
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
