@@ -18,6 +18,7 @@ const Spinner = () => (
 			<div className="wInnerBall"></div>
 		</div>
 	</div>
-)
+);
+
 
 export default Spinner;

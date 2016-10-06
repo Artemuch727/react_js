@@ -1,7 +1,9 @@
 import {connect}from 'react-redux';
+import React, { Component } from 'react';
 import axios from 'axios';
 import {commentFilter, showSpinner}from '../actions/index';
-import IssuesList from '../components/IssuesList';
+import PagingContainer from '../containers/PagingContainer';
+import Issue from '../components/Issue';
 
 const mapStateToProps = (state) => {
 	return {
@@ -28,9 +30,31 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const IssuesListContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(IssuesList);
+@connect(mapStateToProps, mapDispatchToProps)
+class IssuesListContainer extends Component {
+	render() {
+		const {repoIssues, onIssueSelect} = this.props;
+		return (
+			<div>
+				<div className={repoIssues.length > 0 ? 'issuelist' : 'issuelist hidden'}>
+					<div>
+						<ul>
+							{
+								repoIssues.map((issue) =>
+									<Issue
+										key={issue.id}
+										issueInfo={issue}
+										onIssueSelect={onIssueSelect}
+									/>
+								)
+							}
+						</ul>
+					</div>
+				</div>
+				<PagingContainer />
+			</div>
+		)
+	}
+}
 
 export default IssuesListContainer;

@@ -1,0 +1,93 @@
+.issuelist
+  width  90%
+  text-align  center
+  margin  110px auto
+  &__issueBox
+    border  1px solid #e5e5e5
+
+.issueBox
+  border  1px solid #e5e5e5
+  display  flex
+  margin  0 10px
+  justify-content  space-between
+  &:hover
+    background-color rgba(1, 1, 1, 0.02)
+  &__author
+    display  flex
+    flex-direction  column
+    align-items  center
+    min-width  5%
+    overflow  hidden
+    padding  0 5px
+  &__content
+    display  flex
+    flex-direction  column
+    align-items  flex-start
+    justify-content  center
+    width  100%
+    height  100%
+    padding  5px
+    margin  auto
+
+.author
+  &__img
+    width  36px
+    height  36px
+    margin  10px
+  &__login
+    font-size 12px
+
+.login
+  &__link
+    color rgb(51, 51, 51) !important
+    text-decoration  none !important
+  &__link:hover
+    color  #4078c0 !important
+    cursor  pointer !important
+
+.content
+  line-height 1.5em
+  &__issueTitle
+    height  100%
+    padding  13px
+    width  100%
+    color  #767676
+    border-bottom  1px solid #ddd
+    border-top-left-radius  3px
+    border-top-right-radius  3px
+    padding  2px
+    font-weight  bold
+    display  flex
+    justify-content  space-between
+  &__info
+    padding  2px
+    font-size  12px
+
+.title
+  &__link
+    padding  1px
+    font-weight  bold
+    text-decoration  inherit
+    color rgb(51, 51, 51)
+  &__link:hover
+    color  #4078c0
+    cursor  pointer
+  &__comments
+    padding-top  10px
+    display  flex
+    justify-content  space-around
+    align-items  center
+    width  50px
+    height  35px
+    padding  5px
+    margin  5px 5px
+    color  #181717
+
+.info
+  &__text
+    margin-top  -5px
+    margin-right  5px
+    z-index  5
+    position  absolute
+    font-size  15px
+    font-weight  bold

@@ -9,16 +9,16 @@ import IssuesListContainer from './containers/IssuesListContainer';
 import SearchLayout from './containers/SearchLayout';
 import CommentListContainer from './containers/CommentListContainer';
 
-let store = createStore(userStore)
-const history = syncHistoryWithStore(browserHistory, store)
-render ( 
+let store = createStore(userStore);
+const history = syncHistoryWithStore(browserHistory, store);
+render (
            <Provider store={store}>
-             <Router history={history}>                 
-                <Route path="/" component={SearchLayout}>  
-                    <Route path="issues/(:userId)/(:repoId)/(:pageNum)" component={IssuesListContainer} />   
-                		<Route path="issues/detail/(:issueId)" component={CommentListContainer} />  
-                 </Route> 
-                <Route path="*" component={SearchLayout} />  
+             <Router history={history}>
+                <Route path="/" component={SearchLayout}>
+                    <Route path="issues/(:userId)/(:repoId)/(:pageNum)" component={IssuesListContainer} />
+                		<Route path="issues/detail/(:issueId)" component={CommentListContainer} />
+                 </Route>
+                <Route path="*" component={SearchLayout} />
              </Router>
             </Provider> , document.getElementById('content')
 );

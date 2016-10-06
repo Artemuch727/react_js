@@ -1,0 +1,42 @@
+.search-footer
+  display  block
+  margin  0 auto
+
+.paginator
+  width  80%
+  margin  25px auto
+  text-align  center
+
+.pagination
+  display  inline-block
+  margin  20px auto
+  border-radius  4px
+
+.pageNavigation
+  width  100%
+  height  100%
+  &__pageList
+    display  inline-flex
+  &__itemSelector
+    margin-left  10px
+
+.pageList
+  &__item
+    position  relative
+    float  left
+    padding  6px 12px
+    margin-left  -1px
+    line-height  1.6
+    color  #337ab7 !important
+    border  1px solid #ddd !important
+    background-color  #fff !important
+    text-decoration  none !important
+  &__item:hover
+    background-color  #e7e7e7 !important
+    border-color  #e5e5e5 !important
+    &--active
+      z-index  3
+      color  #fff !important
+      cursor  default
+      background-color  #337ab7 !important
+      border-color  #337ab7 !important
