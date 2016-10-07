@@ -3,7 +3,7 @@ import {connect}from 'react-redux';
 import React, { Component } from 'react';
 import {browserHistory}from 'react-router';
 import axios from 'axios';
-import {checkErrors, userFilter, reposFilter, repositorySelect, issuesFilter, issuesCount, showSpinner, visFilter}from '../actions/index';
+import {checkErrors, userFilter, reposFilter, repositorySelect, issuesFilter, issuesCount, showSpinner, visFilter, showErrorDiv}from '../actions/index';
 import Spinner from '../components/Spinner';
 import InputField from '../components/InputField/InputField';
 import ErrorPopup from '../components/ErrorPopup';
@@ -12,6 +12,7 @@ import ErrorPopup from '../components/ErrorPopup';
 const mapStateToProps = (state) => {
 	return {
 		errorLog: state.userFilter.errorLog,
+		showErrorDiv: state.userFilter.showErrorDiv,
 		userLogin: state.userFilter.name,
 		userRepos: state.filteredData.repos,
 		repoIssues: state.filteredData.issues,
@@ -22,16 +23,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	const showErrorWindow = (errText) => {
-		const autoHide = () => {
-			document.querySelector('.errorDiv')
-				.classList.remove('errorDiv--show');
-		};
-		dispatch(checkErrors(errText));
-		document.querySelector('.errorDiv')
-				.classList.add('errorDiv--show');
-		setTimeout(autoHide, 1500);
-	};
 	return {
 		onUserSelect: (userName) => {
 			if (userName !== '') {
@@ -46,22 +37,21 @@ const mapDispatchToProps = (dispatch) => {
 								document.getElementsByName('repository')[0].focus();
 								if (response.data.length > 0) {
 									dispatch(checkErrors(''));
-									document.querySelector('.errorDiv').classList.remove('errorDiv--show');
 								}else {
-									showErrorWindow('У пользователя нет репозиториев');
+									dispatch(checkErrors('У пользователя нет репозиториев'));
+									dispatch(showErrorDiv(true));
 								}
 							})
 							.catch(() => {
 								dispatch(reposFilter([]));
 								dispatch(showSpinner(false));
-								document.getElementsByName('login')[0].focus();
 							});
 					})
 					.catch(() => {
 						dispatch(userFilter('ERR_NotFound', null));
 						dispatch(showSpinner(false));
-						document.getElementsByName('login')[0].focus();
-						showErrorWindow('Пользователь не найден');
+						dispatch(checkErrors('Пользователь не найден'));
+						dispatch(showErrorDiv(true));
 					});
 			}else {
 				dispatch(userFilter(''));
@@ -75,14 +65,16 @@ const mapDispatchToProps = (dispatch) => {
 					.then((response) => {
 						dispatch(issuesCount(response.data.length));
 						if (response.data.length === 0) {
-							showErrorWindow('Нет обращений по репозиторию!');
+							dispatch(checkErrors('Нет обращений по репозиторию!'));
+							dispatch(showErrorDiv(true));
 						}
 					})
 					.catch(() => {
 						dispatch(showSpinner(false));
 						dispatch(issuesCount(0));
-						document.getElementsByName('repository')[0].focus();
-						showErrorWindow('Репозиторий не найден');
+						dispatch(issuesFilter([]));
+						//dispatch(checkErrors('Репозиторий не найден'));
+						//dispatch(showErrorDiv(true));
 					});
 				axios.get('https://api.github.com/repos/' + userName + '/' + repoName + '/issues?page=1&per_page=' + itemsPerPage)
 					.then((response) => {
@@ -93,19 +85,25 @@ const mapDispatchToProps = (dispatch) => {
 					})
 					.catch(() => {
 						dispatch(showSpinner(false));
+						dispatch(issuesCount(0));
 						dispatch(issuesFilter([]));
-						document.getElementsByName('repository')[0].focus();
+						dispatch(checkErrors('Репозиторий не найден'));
+						dispatch(showErrorDiv(true));
 					});
 			}else {
 				dispatch(issuesFilter([]));
 				dispatch(issuesCount(0));
 			}
+		},
+		onShowErrorDiv: (visState) => {
+			dispatch(showErrorDiv(visState));
 		}
 	};
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 class UserLoginRepo extends Component {
+
 	handleUserInput(value) {
 		const {onUserSelect} = this.props;
 		onUserSelect(value);
@@ -116,13 +114,22 @@ class UserLoginRepo extends Component {
 		onRepoSelect(userLogin, value, itemsPerPage);
 	}
 
+	handleErrorDivVisible() {
+		const {onShowErrorDiv, showErrorDiv} = this.props;
+		onShowErrorDiv(!showErrorDiv);
+	}
+
 	render() {
-		const { errorLog, userRepos, userLogin, showSpinner } = this.props;
+		const { errorLog, showErrorDiv, userRepos, userLogin, showSpinner, scrollingClass } = this.props;
 
 		return (
 			<div className="userInfoBox__container">
-				{ <ErrorPopup errorLog = {errorLog} /> }
-				<div className="userInfoBox">
+				{ <ErrorPopup
+					errorLog = {errorLog}
+					showErrorDiv = {showErrorDiv}
+					onShowErrorDiv = {this.handleErrorDivVisible.bind(this)}
+				/> }
+				<div className={"userInfoBox " + scrollingClass}>
 					<a className="logo" href="/">
 						<svg aria-hidden="true" height="45" version="1.1" viewBox="0 0 16 16" width="45">
 							<path

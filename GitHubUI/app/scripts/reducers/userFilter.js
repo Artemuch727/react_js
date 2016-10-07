@@ -1,4 +1,4 @@
-const userFilter = (state = {name: '', rep: '', errorLog: ''}, action) => {
+const userFilter = (state = {name: '', rep: '', errorLog: '', showErrorDiv: false}, action) => {
 	switch (action.type) {
 		case 'USER_CHECK':
 			return {...state, name: action.name};
@@ -6,6 +6,8 @@ const userFilter = (state = {name: '', rep: '', errorLog: ''}, action) => {
 			return {...state, rep: action.repoName};
 		case 'ERROR_CHECK':
 			return {...state, errorLog: action.errorLog};
+		case 'ERROR_SHOW':
+			return {...state, showErrorDiv: action.showErrorDiv};
 		default:
 			return state;
 	}

@@ -20,6 +20,14 @@ export const checkErrors = (errorLog) => {
 	};
 };
 
+export const showErrorDiv = (showErrorDiv) => {
+	return {
+		type: 'ERROR_SHOW',
+		showErrorDiv: showErrorDiv
+	};
+};
+
+
 export const repositorySelect = (repoName) => {
 	return {
 		type: 'REPOSITORY_CHECK',

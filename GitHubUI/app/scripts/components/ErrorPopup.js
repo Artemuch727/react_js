@@ -6,15 +6,24 @@ import React, { Component } from 'react';
 
 
 class ErrorPopup extends Component {
-	render() {
-		const { errorLog } = this.props;
+	autoHide() {
+		const { onShowErrorDiv } = this.props;
+		onShowErrorDiv();
+	}
 
-		return (
-			<div className="errorDiv">
-				<img alt="error" src="/error.png" height="50" width="50"/>
-				<span> { errorLog } </span>
-			</div>
-		)
+	render() {
+		const { errorLog, showErrorDiv } = this.props;
+		if (showErrorDiv) {
+			setTimeout(this.autoHide.bind(this), 1500);
+			return (
+				<div className={(showErrorDiv ? "errorDiv errorDiv--show" : "errorDiv")}>
+					<img alt="error" src="/error.png" height="50" width="50"/>
+					<span> { errorLog } </span>
+				</div>
+			)
+		} else {
+			return <div></div>
+		}
 	}
 }
 
